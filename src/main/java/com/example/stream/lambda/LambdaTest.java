@@ -1,6 +1,8 @@
 package com.example.stream.lambda;
 
 import com.example.stream.model.Apple;
+import com.example.stream.model.Dish;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * lambda表达式应用
@@ -135,6 +138,41 @@ public class LambdaTest {
         System.out.println(list);
     }
 
+    public static List<Dish> getMenu(){
+        List<Dish> menu = Arrays.asList(
+                new Dish("pork", false, 800, Dish.Type.MEAT),
+                new Dish("beef", false, 700, Dish.Type.MEAT),
+                new Dish("chicken", false, 400, Dish.Type.MEAT),
+                new Dish("french fries", true, 530, Dish.Type.OTHER),
+                new Dish("rice", true, 350, Dish.Type.OTHER),
+                new Dish("season fruit", true, 120, Dish.Type.OTHER),
+                new Dish("pizza", true, 550, Dish.Type.OTHER),
+                new Dish("prawns", false, 300, Dish.Type.FISH),
+                new Dish("salmon", false, 450, Dish.Type.FISH) );
+        return menu;
+    }
+
+    public static void testStream(){
+        List<Dish> menu = getMenu();
+        List<String> collect = menu.stream()
+                .filter(
+                        d -> {
+                            System.out.println("filter：" + d.getName());
+                            return d.getCalories() > 500;
+                        }
+                )
+                .map(
+                        d -> {
+                            System.out.println("filter：" + d.getName());
+                            return d.getName();
+                        }
+                )
+                .limit(3)
+                .collect(Collectors.toList());
+        System.out.println(collect);
+
+    }
+
     public static void main(String[] args) throws Exception {
         //testFunctionalInterface();
         //testFunctionalInterface2();
@@ -145,6 +183,7 @@ public class LambdaTest {
         //testMethodRefer();
         //List<Apple> apples = testConstructorRefer();
         //testComprator(apples);
-        testAndThen();
+        //testAndThen();
+        testStream();
     }
 }
