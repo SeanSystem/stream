@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * lambda表达式应用
@@ -135,6 +137,44 @@ public class LambdaTest {
         System.out.println(list);
     }
 
+    public static void testConvert2IntStream(){
+        List<Integer> integers = Arrays.asList(3, 4, 2, 1);
+        int sum = integers.stream()
+                .mapToInt(t -> t)
+                .sum();
+        System.out.println(sum);
+        Stream<Integer> boxed = integers.stream()
+                .mapToInt(t -> t)
+                .boxed();
+    }
+
+    public static void testIntStreamRangeColse(){
+        //包含结束位置数
+        IntStream intStream = IntStream.rangeClosed(1, 100)
+                .filter(n -> n % 2 == 0);
+        System.out.println(intStream.count());
+    }
+
+    public static void testIntStreamRange(){
+        IntStream intStream = IntStream.range(1, 100)
+                .filter(t -> t % 2 == 0);
+        System.out.println(intStream.count());
+    }
+
+    /**
+     * 生成勾股数
+     */
+    public static void gGs(){
+        Stream<double[]> all = IntStream.rangeClosed(1, 100)
+                .boxed()
+                .flatMap(
+                        a -> IntStream.rangeClosed(a, 100)
+                                .mapToObj(b -> new double[]{a, b, Math.sqrt(a * a + b * b)})
+                                .filter(t -> t[2] % 1 == 0)
+                );
+        all.forEach(t->System.out.println((int)t[0]+","+(int)t[1]+","+(int)t[2]));
+    }
+
     public static void main(String[] args) throws Exception {
         //testFunctionalInterface();
         //testFunctionalInterface2();
@@ -145,6 +185,10 @@ public class LambdaTest {
         //testMethodRefer();
         //List<Apple> apples = testConstructorRefer();
         //testComprator(apples);
-        testAndThen();
+       // testAndThen();
+        //testConvert2IntStream();
+       // testIntStreamRangeColse();
+        //testIntStreamRange();
+        gGs();
     }
 }
