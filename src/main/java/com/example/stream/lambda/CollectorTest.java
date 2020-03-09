@@ -3,6 +3,7 @@ package com.example.stream.lambda;
 import com.example.stream.model.Dish;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.*;
 
@@ -130,7 +131,7 @@ public class CollectorTest {
     /**
      * 分组之后映射
      */
-    public static void testMapping(){
+    public static void testMapping() {
         Map<Dish.Type, HashSet<Dish.CaloricLevel>> collect = dishs.stream().collect(
                 groupingBy(
                         Dish::getType,
@@ -150,6 +151,46 @@ public class CollectorTest {
         System.out.println(collect);
     }
 
+    /**
+     * 将数据分组两组
+     */
+    public static void testPartitioningBy() {
+        Map<Boolean, List<Dish>> collect = dishs.stream().collect(partitioningBy(Dish::isVegetarian));
+        System.out.println(collect);
+    }
+
+    /**
+     * PartitioningBy多分组
+     */
+    public static void testPartitioningBy2() {
+        Map<Boolean, Map<Dish.Type, List<Dish>>> collect =
+                dishs.stream().collect(partitioningBy(Dish::isVegetarian, groupingBy(Dish::getType)));
+        System.out.println(collect);
+
+    }
+
+    /**
+     * 判断是否是质数
+     *
+     * @param candidate
+     * @return
+     */
+    private static boolean isPrime(int candidate) {
+        int candidateRoot = (int) Math.sqrt((double) candidate);
+        return IntStream.rangeClosed(2, candidateRoot)
+                .noneMatch(item -> candidate % item == 0);
+    }
+
+    /**
+     * 区分质数和非质数
+     */
+    public static void testPartitioningBy3() {
+        int n = 100;
+        Map<Boolean, List<Integer>> collect = IntStream.rangeClosed(2, n).boxed().collect(
+                partitioningBy(i -> isPrime(i))
+        );
+        System.out.println(collect);
+    }
 
     public static void main(String[] args) {
         //testCount();
@@ -164,7 +205,10 @@ public class CollectorTest {
         // testGroupingBy3();
         //testGroupingBy4();
         //testCollectingAndThen();
-        testMapping();
+        // testMapping();
+        // testPartitioningBy();
+        // testPartitioningBy2();
+        testPartitioningBy3();
     }
 
 }
