@@ -3,22 +3,15 @@ package com.example.stream.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-<<<<<<< HEAD
+import java.util.List;
+import java.util.Arrays;
 
 /**
  * @author Sean
  * @date 2020/03/02
-=======
-import java.util.Arrays;
-import java.util.List;
-
-/**
- * 菜单实体类
  *
- * @author Sean
- * 2020/03/07
->>>>>>> 80e47818810c2e66d51c92ff659fd2776a6f3487
- */
+ * */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,10 +25,7 @@ public class Dish {
 
     private Type type;
 
-<<<<<<< HEAD
     public enum Type{MEAT, FISH, OTHER}
-=======
-    public enum Type {MEAT, FISH, OTHER}
 
     public enum CaloricLevel{DIET, NORMAL, FAT}
 
@@ -52,6 +42,4 @@ public class Dish {
                 new Dish("salmon", false, 450, Dish.Type.FISH) );
         return menu;
     }
-
->>>>>>> 80e47818810c2e66d51c92ff659fd2776a6f3487
 }
