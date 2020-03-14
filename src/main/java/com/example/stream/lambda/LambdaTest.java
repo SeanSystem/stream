@@ -1,6 +1,7 @@
 package com.example.stream.lambda;
 
 import com.example.stream.model.Apple;
+import com.example.stream.model.Dish;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -23,7 +25,7 @@ import java.util.stream.Stream;
  */
 public class LambdaTest {
 
-    public static void testFunctionalInterface(){
+    public static void testFunctionalInterface() {
         Runnable r1 = () -> System.out.println("r1 run");
         Runnable r2 = new Runnable() {
             @Override
@@ -35,30 +37,30 @@ public class LambdaTest {
         process(r2);
     }
 
-    public static void testFunctionalInterface2() throws Exception{
+    public static void testFunctionalInterface2() throws Exception {
         String s = processFile((BufferedReader br) -> br.readLine());
         System.out.println(s);
         String s1 = processFile((BufferedReader br) -> br.readLine() + br.readLine());
         System.out.println(s1);
     }
 
-    public static String processFile(BufferedReaderProcess bp) throws Exception{
-        try(BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Administrator\\Desktop\\服务器.txt"))){
-           return bp.process(br);
+    public static String processFile(BufferedReaderProcess bp) throws Exception {
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Administrator\\Desktop\\服务器.txt"))) {
+            return bp.process(br);
         }
     }
 
-    public static <T>  List<T> filterList(List<T> list, Predicate<T> predicate){
+    public static <T> List<T> filterList(List<T> list, Predicate<T> predicate) {
         ArrayList<T> arr = new ArrayList<>();
-        for(T s : list){
-            if(predicate.test(s)){
+        for (T s : list) {
+            if (predicate.test(s)) {
                 arr.add(s);
             }
         }
         return arr;
     }
 
-    public static void testPredicate(){
+    public static void testPredicate() {
         ArrayList<String> strings = new ArrayList<>();
         strings.add("adfdf");
         strings.add("sfs");
@@ -68,26 +70,26 @@ public class LambdaTest {
         System.out.println(strings1);
     }
 
-    public static <T> void forEach(List<T> list, Consumer<T> consumer){
-        for(T t : list){
+    public static <T> void forEach(List<T> list, Consumer<T> consumer) {
+        for (T t : list) {
             consumer.accept(t);
         }
     }
 
-    public static void testConsumer(){
+    public static void testConsumer() {
         List<String> list = Arrays.asList("1", "2", "3");
-        forEach(list, (String s)-> System.out.println(s));
+        forEach(list, (String s) -> System.out.println(s));
     }
 
-    public static <T,R> List<R> map(List<T> list, Function<T,R> f){
+    public static <T, R> List<R> map(List<T> list, Function<T, R> f) {
         List<R> result = new ArrayList<>();
-        for(T t : list){
+        for (T t : list) {
             result.add(f.apply(t));
         }
         return result;
     }
 
-    public static void testFunction(){
+    public static void testFunction() {
         ArrayList<String> strings = new ArrayList<>();
         strings.add("adfdf");
         strings.add("sfs");
@@ -97,28 +99,28 @@ public class LambdaTest {
     }
 
 
-    public static void process(Runnable runnable){
+    public static void process(Runnable runnable) {
         runnable.run();
     }
 
     /**
      * 方法引用
      */
-    public static void testMethodRefer(){
+    public static void testMethodRefer() {
         List<String> list = Arrays.asList("a", "b", "A", "B");
         list.sort(String::compareToIgnoreCase);
         System.out.println(list);
     }
 
-    public static List<Apple> createApple(List<Integer> list, Function<Integer, Apple> function){
+    public static List<Apple> createApple(List<Integer> list, Function<Integer, Apple> function) {
         ArrayList<Apple> apples = new ArrayList<>();
-        for(Integer i : list){
+        for (Integer i : list) {
             apples.add(function.apply(i));
         }
         return apples;
     }
 
-    public static List<Apple> testConstructorRefer(){
+    public static List<Apple> testConstructorRefer() {
         Function<Integer, Apple> function = Apple::new;
         List<Integer> integers = Arrays.asList(3, 4, 2, 1);
         List<Apple> apple = createApple(integers, function);
@@ -126,7 +128,7 @@ public class LambdaTest {
         return apple;
     }
 
-    public static void testAndThen(){
+    public static void testAndThen() {
         Function<Integer, Integer> f = (x) -> x + 1;
         Function<Integer, Integer> g = (x) -> x * 2;
         Function<Integer, Integer> result = f.andThen(g);
@@ -134,12 +136,46 @@ public class LambdaTest {
         System.out.println(apply);
     }
 
-    public static void testComprator(List<Apple> list){
+    public static void testComprator(List<Apple> list) {
         list.sort(comparing(Apple::getWeight));
         System.out.println(list);
     }
 
-    public static void testConvert2IntStream(){
+    public static List<Dish> getMenu() {
+        List<Dish> menu = Arrays.asList(
+                new Dish("pork", false, 800, Dish.Type.MEAT),
+                new Dish("beef", false, 700, Dish.Type.MEAT),
+                new Dish("chicken", false, 400, Dish.Type.MEAT),
+                new Dish("french fries", true, 530, Dish.Type.OTHER),
+                new Dish("rice", true, 350, Dish.Type.OTHER),
+                new Dish("season fruit", true, 120, Dish.Type.OTHER),
+                new Dish("pizza", true, 550, Dish.Type.OTHER),
+                new Dish("prawns", false, 300, Dish.Type.FISH),
+                new Dish("salmon", false, 450, Dish.Type.FISH));
+        return menu;
+    }
+
+    public static void testStream() {
+        List<Dish> menu = getMenu();
+        List<String> collect = menu.stream()
+                .filter(
+                        d -> {
+                            System.out.println("filter：" + d.getName());
+                            return d.getCalories() > 500;
+                        }
+                )
+                .map(
+                        d -> {
+                            System.out.println("filter：" + d.getName());
+                            return d.getName();
+                        }
+                )
+                .limit(3)
+                .collect(Collectors.toList());
+        System.out.println(collect);
+    }
+
+    public static void testConvert2IntStream() {
         List<Integer> integers = Arrays.asList(3, 4, 2, 1);
         int sum = integers.stream()
                 .mapToInt(t -> t)
@@ -150,14 +186,14 @@ public class LambdaTest {
                 .boxed();
     }
 
-    public static void testIntStreamRangeColse(){
+    public static void testIntStreamRangeColse() {
         //包含结束位置数
         IntStream intStream = IntStream.rangeClosed(1, 100)
                 .filter(n -> n % 2 == 0);
         System.out.println(intStream.count());
     }
 
-    public static void testIntStreamRange(){
+    public static void testIntStreamRange() {
         IntStream intStream = IntStream.range(1, 100)
                 .filter(t -> t % 2 == 0);
         System.out.println(intStream.count());
@@ -166,7 +202,7 @@ public class LambdaTest {
     /**
      * 生成勾股数
      */
-    public static void gGs(){
+    public static void gGs() {
         Stream<double[]> all = IntStream.rangeClosed(1, 100)
                 .boxed()
                 .flatMap(
@@ -174,7 +210,7 @@ public class LambdaTest {
                                 .mapToObj(b -> new double[]{a, b, Math.sqrt(a * a + b * b)})
                                 .filter(t -> t[2] % 1 == 0)
                 );
-        all.forEach(t->System.out.println((int)t[0]+","+(int)t[1]+","+(int)t[2]));
+        all.forEach(t -> System.out.println((int) t[0] + "," + (int) t[1] + "," + (int) t[2]));
     }
 
     public static void main(String[] args) throws Exception {
@@ -187,9 +223,11 @@ public class LambdaTest {
         //testMethodRefer();
         //List<Apple> apples = testConstructorRefer();
         //testComprator(apples);
-       // testAndThen();
+        //testAndThen();
+        testStream();
+        // testAndThen();
         //testConvert2IntStream();
-       // testIntStreamRangeColse();
+        // testIntStreamRangeColse();
         //testIntStreamRange();
         gGs();
     }
