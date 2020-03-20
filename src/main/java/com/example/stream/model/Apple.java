@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
  * @author Sean
  * @date 2020/02/25
  */
+
+/**
+ * 重写了equals方法
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
