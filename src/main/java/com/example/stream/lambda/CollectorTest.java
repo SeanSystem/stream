@@ -3,6 +3,9 @@ package com.example.stream.lambda;
 import com.example.stream.model.Dish;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.*;
@@ -13,7 +16,7 @@ import static java.util.stream.Collectors.*;
  * @author Sean
  * 2020/03/07
  */
-public class CollectorTest {
+public class CollectorTest{
 
     public static List<Dish> dishs = Dish.getDishs();
 
@@ -208,7 +211,7 @@ public class CollectorTest {
         // testMapping();
         // testPartitioningBy();
         // testPartitioningBy2();
-        testPartitioningBy3();
+       // testPartitioningBy3();
     }
 
 }
