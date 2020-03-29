@@ -17,5 +17,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Apple {
 
-    private Integer weight;
+    public volatile int weight;
 }
